@@ -24,7 +24,7 @@ local tile_two = {
     y = 12,
     xspeed = 5,
     yspeed = 5,
-    r = 1,
+    r = 100,
     g = 1,
     b = 1
 }
@@ -36,14 +36,14 @@ local function input_user()
     end
 end
 
-local function random_float()
-    return math.floor(math.random() * 10) / 10
-end
+local function random_col()
+    return math.random(0, 255)
+end 
 
 local function color_randomizer(t)
-    t.r = random_float()
-    t.g = random_float()
-    t.b = random_float()
+    t.r = random_col()
+    t.g = random_col()
+    t.b = random_col()
 end
 
 local function check_position()
@@ -71,7 +71,7 @@ local function check_position()
 end
 
 local function draw_rect(t)
-    love.graphics.setColor(t.r, t.g, t.b)
+    love.graphics.setColor(love.math.colorFromBytes(t.r, t.g, t.b))
     love.graphics.rectangle("fill", t.x, t.y, t.size, t.size)
 end
 
