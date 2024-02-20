@@ -30,6 +30,15 @@ local tile_two = {
 }
 
 
+local text_logo = {
+    val = "Hello World !",
+    r = 255,
+    g = 0,
+    b = 255,
+    x = SCREEN_WIDTH / 2,
+    y = SCREEN_HEIGHT / 2
+}
+
 local function input_user()
     if love.keyboard.isDown("escape") then
         love.event.quit()
@@ -57,6 +66,8 @@ local function check_position()
         tile.yspeed = tile.yspeed * -1
         color_randomizer(tile)
     end
+
+
 
     --tile two
     if tile_two.x + tile_two.size >= SCREEN_WIDTH or tile_two.x <= 0 then
@@ -94,8 +105,8 @@ function love.update(dt) -- loop 60 times/sec
 end
 
 function love.draw() -- draw on the screen
-    love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Hello World", SCREEN_WIDTH/2, SCREEN_HEIGHT/2)
+    love.graphics.setColor(love.math.colorFromBytes(text_logo.r,text_logo.g,text_logo.b))
+    love.graphics.print(text_logo.val, text_logo.x, text_logo.y)
     draw_rect(tile)
     draw_rect(tile_two)
 end
