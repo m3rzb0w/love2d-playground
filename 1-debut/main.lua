@@ -144,10 +144,10 @@ end
 
 local function draw_rect(t)
     --border
-    -- if debug_status then
-    --     love.graphics.setColor(60 / 255, 179 / 255, 113 / 255)
-    --     love.graphics.rectangle("fill", t.x - 10, t.y - 10, t.size + 20, t.size + 20)
-    -- end
+    if debug_status then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.rectangle("line", t.x, t.y, t.size, t.size)
+    end
     --fill
     love.graphics.setColor(love.math.colorFromBytes(t.r, t.g, t.b))
     love.graphics.rectangle("fill", t.x, t.y, t.size, t.size)
