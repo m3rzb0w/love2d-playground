@@ -24,9 +24,20 @@ local tile_two = {
     y = 12,
     xspeed = 5,
     yspeed = 5,
-    r = 100,
-    g = 1,
-    b = 1
+    r = 255,
+    g = 0,
+    b = 255
+}
+
+local player = {
+    size = 20,
+    x = 10,
+    y = 120,
+    xspeed = 200,
+    yspeed = 200,
+    r = 255,
+    g = 255,
+    b = 255
 }
 
 local text_logo = {
@@ -38,7 +49,7 @@ local text_logo = {
     y = SCREEN_HEIGHT / 2
 }
 
-local debug_status = true
+local debug_status = false
 local rebound_count = 0
 
 
@@ -58,9 +69,25 @@ function love.keypressed(k)
     end
 end
 
-local function input_user()
+local function input_user(dt)
     if love.keyboard.isDown("escape") then
         love.event.quit()
+    end
+
+    if love.keyboard.isDown("up") then
+        player.y = player.y - player.yspeed * dt
+    end
+
+    if love.keyboard.isDown("down") then
+        player.y = player.y + player.yspeed * dt
+    end
+
+    if love.keyboard.isDown("left") then
+        player.x = player.x - player.xspeed * dt
+    end
+
+    if love.keyboard.isDown("right") then
+        player.x = player.x + player.xspeed * dt
     end
 
     love.keypressed()
@@ -129,7 +156,7 @@ end
 function love.update(dt) -- loop 60 times/sec
     -- dt delta time
 
-    input_user()
+    input_user(dt)
     tile.x = tile.x + tile.xspeed
     tile.y = tile.y + tile.yspeed
     tile_two.x = tile_two.x + tile_two.xspeed
@@ -139,9 +166,10 @@ end
 
 function love.draw() -- draw on the screen
     love.graphics.setColor(1, 1, 1)
-    love.graphics.printf("Press d for debug mode | status : " .. tostring(debug_status).."\nRebound : "..rebound_count, 10, 10, SCREEN_HEIGHT, "left")
+    love.graphics.printf("Press d for debug mode | status : " .. tostring(debug_status).."\nRebound : "..rebound_count.."\nPlayer pos : "..player.x..", "..player.y, 10, 10, SCREEN_HEIGHT, "left")
     love.graphics.setColor(love.math.colorFromBytes(text_logo.r, text_logo.g, text_logo.b))
     love.graphics.print(text_logo.val, text_logo.x, text_logo.y)
     draw_rect(tile)
     draw_rect(tile_two)
+    draw_rect(player)
 end
