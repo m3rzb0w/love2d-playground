@@ -45,19 +45,19 @@ local function print_debug()
     print("[info]: debug status : " .. tostring(debug_status))
 end
 
+function love.keypressed(k)
+    if k == "d" then
+        debug_status = not debug_status
+        print_debug()
+    end
+end
+
 local function input_user()
     if love.keyboard.isDown("escape") then
         love.event.quit()
     end
 
-    if love.keyboard.isDown("d") then
-        if debug_status then
-            debug_status = false
-        else
-            debug_status = true
-        end
-        print_debug()
-    end
+    love.keypressed()
 end
 
 local function random_col()
@@ -128,6 +128,8 @@ function love.update(dt) -- loop 60 times/sec
 end
 
 function love.draw() -- draw on the screen
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.print("Press d for debug mode | status : " .. tostring(debug_status), 10, 10)
     love.graphics.setColor(love.math.colorFromBytes(text_logo.r, text_logo.g, text_logo.b))
     love.graphics.print(text_logo.val, text_logo.x, text_logo.y)
     draw_rect(tile)
