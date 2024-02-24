@@ -30,7 +30,7 @@ local tile_two = {
 }
 
 local player = {
-    size = 20,
+    size = 40,
     x = 10,
     y = 120,
     xspeed = 200,
@@ -49,9 +49,18 @@ local text_logo = {
     y = SCREEN_HEIGHT / 2
 }
 
+local assets_path = "assets/pictures/"
+
+local assets = {
+    background = assets_path.."bg_space.jpeg",
+    ship = assets_path.."ship.png",
+}
+
 local debug_status = false
 local rebound_count = 0
 
+local bg = love.graphics.newImage(assets.background)
+local ship = love.graphics.newImage(assets.ship)
 
 local function print_debug()
     print("[info]: debug status : " .. tostring(debug_status))
@@ -135,16 +144,27 @@ end
 
 local function draw_rect(t)
     --border
-    if debug_status then
-        love.graphics.setColor(60 / 255, 179 / 255, 113 / 255)
-        love.graphics.rectangle("fill", t.x - 10, t.y - 10, t.size + 20, t.size + 20)
-    end
+    -- if debug_status then
+    --     love.graphics.setColor(60 / 255, 179 / 255, 113 / 255)
+    --     love.graphics.rectangle("fill", t.x - 10, t.y - 10, t.size + 20, t.size + 20)
+    -- end
     --fill
     love.graphics.setColor(love.math.colorFromBytes(t.r, t.g, t.b))
     love.graphics.rectangle("fill", t.x, t.y, t.size, t.size)
 end
 
+local function draw_player(p)
+    love.graphics.setColor(1, 1, 1)
+    love.graphics.draw(ship, p.x, p.y, 0, 1, 1)
+    if debug_status then
+        love.graphics.setColor(1, 1, 1)
+        love.graphics.rectangle("line", p.x, p.y, p.size, p.size)
+        love.graphics.setColor(255/255, 0, 255/255)
+        love.graphics.rectangle("line", p.x + p.size/2 - 8, p.y + p.size/2 - 8, 16, 16)
+        love.graphics.setColor(1, 1, 1)
+    end
 
+end
 
 -- love2d init functions
 
@@ -165,11 +185,14 @@ function love.update(dt) -- loop 60 times/sec
 end
 
 function love.draw() -- draw on the screen
+    love.graphics.draw(bg, 0, 0, 0, 1, 1)
+    
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Press d for debug mode | status : " .. tostring(debug_status).."\nRebound : "..rebound_count.."\nPlayer pos : "..player.x..", "..player.y, 10, 10, SCREEN_HEIGHT, "left")
     love.graphics.setColor(love.math.colorFromBytes(text_logo.r, text_logo.g, text_logo.b))
-    love.graphics.print(text_logo.val, text_logo.x, text_logo.y)
+    love.graphics.printf(text_logo.val, 0, text_logo.y, SCREEN_WIDTH, "center")
     draw_rect(tile)
     draw_rect(tile_two)
-    draw_rect(player)
+    -- draw_rect(player)
+    draw_player(player)
 end
