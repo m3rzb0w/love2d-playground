@@ -1,4 +1,3 @@
-require "table.clear"
 ---@meta
 
 --user input
