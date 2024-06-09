@@ -1,4 +1,6 @@
+---@meta
 -- requires
+require "bullet"
 
 -- variables
 local bg_rgb = { -- black
@@ -37,8 +39,15 @@ local player = {
     yspeed = 200,
     r = 255,
     g = 255,
-    b = 255
+    b = 255,
 }
+
+local ground_bg = {
+    x = 0,
+    y = -1200,
+    yspeed = 50
+}
+
 
 local text_logo = {
     val = "Hello World !",
@@ -52,14 +61,12 @@ local text_logo = {
 local assets_path = "assets/pictures/"
 
 local assets = {
-    background = assets_path.."bg_space.jpeg",
     ship = assets_path.."ship.png",
 }
 
 local debug_status = false
 local rebound_count = 0
 
-local bg = love.graphics.newImage(assets.background)
 local ship = love.graphics.newImage(assets.ship)
 
 local function print_debug()
@@ -76,7 +83,12 @@ function love.keypressed(k)
         rebound_count = 0
         print("[info] resetting rebound")
     end
+
+    if k == "a" then
+        BULLET.shoot(k, player)
+    end
 end
+
 
 local function input_user(dt)
     if love.keyboard.isDown("escape") then
@@ -98,6 +110,10 @@ local function input_user(dt)
     if love.keyboard.isDown("right") then
         player.x = player.x + player.xspeed * dt
     end
+
+    -- if love.keyboard.isDown("a") then
+    --     BULLET.shoot("a", player)
+    -- end
 
     love.keypressed()
 end
@@ -163,8 +179,9 @@ local function draw_player(p)
         love.graphics.rectangle("line", p.x + p.size/2 - 8, p.y + p.size/2 - 8, 16, 16)
         love.graphics.setColor(1, 1, 1)
     end
-
 end
+
+
 
 -- love2d init functions
 
@@ -182,17 +199,27 @@ function love.update(dt) -- loop 60 times/sec
     tile_two.x = tile_two.x + tile_two.xspeed
     tile_two.y = tile_two.y + tile_two.yspeed
     check_position()
+    ground_bg.y = ground_bg.y + ground_bg.yspeed * dt
+    if ground_bg.y >= 1200 then
+        ground_bg.y = -1200
+    end
+    BULLET.update(dt)
 end
 
 function love.draw() -- draw on the screen
-    love.graphics.draw(bg, 0, 0, 0, 1, 1)
-    
+    -- love.graphics.draw(bg, 0, 0, 0, 1, 1)
+    -- love.graphics.draw(ground, ground_bg.x, ground_bg.y)
+
+
     love.graphics.setColor(1, 1, 1)
     love.graphics.printf("Press d for debug mode | status : " .. tostring(debug_status).."\nRebound : "..rebound_count.."\nPlayer pos : "..player.x..", "..player.y, 10, 10, SCREEN_HEIGHT, "left")
     love.graphics.setColor(love.math.colorFromBytes(text_logo.r, text_logo.g, text_logo.b))
     love.graphics.printf(text_logo.val, 0, text_logo.y, SCREEN_WIDTH, "center")
-    draw_rect(tile)
-    draw_rect(tile_two)
+    -- draw_rect(tile)
+    -- draw_rect(tile_two)
     -- draw_rect(player)
     draw_player(player)
+    BULLET.draw()
+    love.graphics.setColor(1, 1, 1)
+
 end

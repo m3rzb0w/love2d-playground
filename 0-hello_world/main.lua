@@ -64,7 +64,7 @@ tile_count = tile_count + 1
 
 function love.keypressed(k)
     if k == "space" then
-        t = Tile(64, math.random(1, SCREEN_WIDTH/2), math.random(1, SCREEN_HEIGHT/2), 5, 5, 255, 0, 255)
+        t = Tile(64, math.random(1, SCREEN_WIDTH / 2), math.random(1, SCREEN_HEIGHT / 2), 5, 5, 255, 0, 255)
         table.insert(tiles, t)
         tile_count = tile_count + 1
     end
@@ -102,7 +102,7 @@ end
 
 function love.draw() -- draw on the screen
     love.graphics.setColor(1, 1, 1)
-    love.graphics.print("Current FPS: "..tostring(love.timer.getFPS( )), 10, 10)
+    love.graphics.print("Current FPS: " .. tostring(love.timer.getFPS()), 10, 10)
     love.graphics.printf("Press space to add tile | tile count : " .. tostring(tile_count), 10, 25, SCREEN_HEIGHT, "left")
     for _, t in ipairs(tiles) do
         t:draw_tile()
